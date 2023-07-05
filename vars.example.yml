@@ -1,0 +1,5 @@
+---
+db_user: nb_user
+db_password: PASSWORD
+db_name: netbox
+netbox_vers: 3.5.4

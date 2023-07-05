@@ -1,0 +1,117 @@
+---
+- hosts: all
+  become: yes
+
+  vars_files:
+    - vars.yml
+
+  tasks:
+    - name: "Install Netbox packages"
+      apt: "name={{ item }} state=present"
+      with_items:
+        - unzip
+        - python3-venv 
+        - python3-dev
+        - build-essential
+        - libxml2-dev
+        - libxslt1-dev
+        - libffi-dev
+        - libpq-dev
+        - libssl-dev
+        - zlib1g-dev
+
+    - name: "Download Netbox"
+      get_url: "url={{ 'https://github.com/netbox-community/netbox/archive/refs/tags/v' + netbox_vers + '.tar.gz' }} dest=/tmp"
+
+    - name: "Unarchive Netbox"
+      unarchive:
+        src: "{{ '/tmp/netbox-' + netbox_vers + '.tar.gz' }}"
+        dest: "/opt"
+        remote_src: yes
+
+    - name: "Create symbolic link"
+      file:
+        src: "/opt/netbox-{{ netbox_vers }}/"
+        dest: "/opt/netbox"
+        state: link
+
+    - name: "Create Netbox group"
+      group:
+        name: netbox
+        state: present
+
+    - name: "Create Netbox user"
+      user:
+        name: netbox
+        groups:
+          - netbox
+        state: present
+        system: yes
+     
+    - name: "Modify media permissions"
+      file:
+        path: "/opt/netbox/netbox/media"
+        owner: "netbox"
+        group: "netbox"
+        recurse: yes
+
+    - name: "Modify report permissions"
+      file:
+        path: "/opt/netbox/netbox/reports"
+        owner: "netbox"
+        group: "netbox"
+        recurse: yes
+      
+    - name: "Modify script permissions"
+      file:
+        path: "/opt/netbox/netbox/scripts"
+        owner: "netbox"
+        group: "netbox"
+        recurse: yes
+
+    - name: "Copy configuration example"
+      become: yes
+      copy:
+        remote_src: true
+        src: "/opt/netbox/netbox/netbox/configuration_example.py"
+        dest: "/opt/netbox/netbox/netbox/configuration.py"
+
+    - name: "Modify ALLOWED_HOSTS"
+      lineinfile:
+        path: "/opt/netbox/netbox/netbox/configuration.py"
+        search_string: "ALLOWED_HOSTS = []"
+        line: "ALLOWED_HOSTS = ['*']"
+
+
+    - name: "Modify database user"
+      lineinfile:
+        path: "/opt/netbox/netbox/netbox/configuration.py"
+        search_string: "    'USER': '',               # PostgreSQL username"
+        line: "\u0027USER\u0027: \u0027{{  db_user }}\u0027,  # PostgreSQL username"
+
+    - name: "Modify database password"
+      lineinfile:
+        path: "/opt/netbox/netbox/netbox/configuration.py"
+        search_string: "    'PASSWORD': '',           # PostgreSQL password"
+        line: "\u0027PASSWORD\u0027: \u0027{{  db_password }}\u0027,  # PostgreSQL password'}}"
+
+    - name: "Generate Netbox Secret Key"
+      become: yes
+      shell: /usr/bin/python3 /opt/netbox/netbox/generate_secret_key.py
+      register: secret_key
+
+    - name: "Modify secret key"
+      lineinfile:
+        path: "/opt/netbox/netbox/netbox/configuration.py"
+        search_string: "SECRET_KEY = ''"
+        line: "SECRET_KEY = '{{ secret_key.stdout }}'"
+
+    - name: "Create log directory"
+      file:
+        path: "/tmp/netbox-logs/"
+        state: directory
+
+    - name: "Run Netbox upgrade script (this one takes awhile)"
+      become: yes
+      shell: /opt/netbox/upgrade.sh >> /tmp/netbox-logs/netbox_upgrade.log creates=/tmp/netbox-logs/netbox_upgrade.log
+
