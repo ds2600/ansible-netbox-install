@@ -23,6 +23,7 @@
       register: postgres_data
 
     - name: "Initialize PostgreSQL"
+      become: yes
       become_user: postgres
       command: "/usr/lib/postgresql/14/bin/initdb -D /var/lib/postgresql/data"
       when: not postgres_data.stat.exists
