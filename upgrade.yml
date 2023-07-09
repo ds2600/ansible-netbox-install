@@ -1,0 +1,10 @@
+---
+- name: "Create log directory"
+  file:
+    path: "/tmp/netbox-logs/"
+    state: directory
+
+- name: "Run Netbox upgrade script (this one takes awhile)"
+  become: yes
+  shell: /opt/netbox/upgrade.sh >> /tmp/netbox-logs/netbox_upgrade.log creates=/tmp/netbox-logs/netbox_upgrade.log
+

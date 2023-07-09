@@ -1,27 +1,18 @@
 # Ansible: Netbox Installation
 
-Currently a group of various playbooks to install Netbox. Soon I will push a main.yml to make easier. Also my first playbook, so if you find something that can be cleaner, go ahead and submit a pull request.
+An Ansible playbook to run through the installation process of Netbox.
 
-## Basics
-These playbooks were designed and tested on Linode (now Akamai) running Ubuntu 22.04 LTS. In theory it should work anywhere you can push your SSH key to. The current playbooks install Netbox 3.5.4.
+## Compatibility
+   * Ubuntu 22.04LTS VM 
+   * Ubuntu 22.04LTS Linode/Akamai.
+
+## Ansible Control Dependencies
+   * community.general
 
 ## Current Installation Process
-
-1. Ensure you can log into your remote machine via SSH certificate.
-2. Copy `hosts.example.ini` to `hosts.ini` and modify IP in the `hosts.ini` file to reflect your remote server and the correct `ansible_user`
-3. Copy `vars.example.yml` to `vars.yml` and add a secure database password to the `db_password` variable
-4. Run the playbooks in the following order:
-   - initial.yml
-   - postgres.yml
-   - redis.yml
-   - netbox.yml
-   - housekeeping.yml
-5. Stop here, SSH into your remote server and create a Netbox superuser:
-    ``` shell
-    source /opt/netbox/venv/bin/activate
-    cd /opt/netbox/netbox
-    python3 manage.py createsuperuser
-    ```
-6. Run the remaining playbooks:
-   - gunicorn.yml
-   - http.yml
+1. Ensure your Ansible control node can communicate with your desired Netbox server
+2. Copy `inventory.example.yml` to `inventory.yml` and modify the IP address and `ansible_user` to reflect your environment
+3. Copy `config.example.yml` to `config.yml` and modify usernames and passwords.
+***Do not use the passwords included in the example file, they are not secure.***
+***Do not adjust the Netbox version - as 3.5.4 is the only tested version***
+1. Run `ansible-playbook main.yml`

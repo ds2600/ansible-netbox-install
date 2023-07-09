@@ -1,31 +1,21 @@
 ---
-- hosts: all
-  become: yes
+- name: "Creating service for housekeeping"
+  file:
+    src: "/opt/netbox/contrib/netbox-housekeeping.service"
+    dest: "/etc/systemd/system/netbox-housekeeping.service"
+    state: link
 
-  tasks:
-    - name: "Schedule housekeeping task"
-      file:
-        src: "/opt/netbox/contrib/netbox-housekeeping.sh"
-        dest: "/etc/cron.daily/netbox-housekeeping"
-        state: link
+- name: "Creating timer for housekeeping"
+  file:
+    src: "/opt/netbox/contrib/netbox-housekeeping.timer"
+    dest: "/etc/systemd/system/netbox-housekeeping.timer"
+    state: link
 
-    - name: "Creating service for housekeeping"
-      file:
-        src: "/opt/netbox/contrib/netbox-housekeeping.service"
-        dest: "/etc/systemd/system/netbox-housekeeping.service"
-        state: link
-
-    - name: "Creating timer for housekeeping"
-      file:
-        src: "/opt/netbox/contrib/netbox-housekeeping.timer"
-        dest: "/etc/systemd/system/netbox-housekeeping.timer"
-        state: link
-
-    - name: "Enabling housekeeping timer"
-      systemd:
-        daemon_reload: yes
-        name: "netbox-housekeeping.timer"
-        enabled: true
+- name: "Enabling housekeeping timer"
+  systemd:
+    daemon_reload: yes
+    name: "netbox-housekeeping.timer"
+    enabled: true
 
 
 

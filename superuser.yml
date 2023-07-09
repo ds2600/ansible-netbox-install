@@ -1,0 +1,19 @@
+---
+- name: "Checking for previous superuser registration"
+  stat:
+    path: "/tmp/netbox-logs/superuser_created"
+  register: superuser_beacon
+
+- name: "Create Netbox superuser"
+  django_manage:
+    virtualenv: "/opt/netbox/venv/"
+    project_path: "/opt/netbox/netbox/"
+    command: "createsuperuser --noinput --username={{ nb_superuser }} --email={{ nb_email }}"
+  when: not superuser_beacon.stat.exists
+
+- name: Create beacon file for superuser creation
+  become: yes
+  file:
+    path: "/tmp/netbox-logs/superuser_created"
+    state: touch
+  when: not superuser_beacon.stat.exists

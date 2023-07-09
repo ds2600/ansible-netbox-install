@@ -1,0 +1,42 @@
+---
+- name: Install Netbox
+  hosts: netbox
+  become: yes
+
+  environment:
+    DJANGO_SUPERUSER_PASSWORD: "{{ nb_password }}"
+
+  vars_files:
+  - config.yml
+  
+  tasks:
+    - name: Checking OS version
+      meta: end_play
+      when: ansible_distribution != 'Ubuntu' or ansible_distribution_major_version != '22.043'
+
+    - name: Install preliminary packages
+      import_tasks: initial.yml
+
+    - name: Install and configure PostgreSQL
+      import_tasks: postgres.yml
+
+    - name: Install Redis
+      import_tasks: redis.yml
+    
+    - name: Download and install Netbox
+      import_tasks: netbox.yml
+
+    - name: Run Netbox Upgrade script
+      import_tasks: upgrade.yml
+
+    - name: Create Netbox superuser
+      import_tasks: superuser.yml
+
+    - name: Create Housekeeping task and timer
+      import_tasks: housekeeping.yml
+
+    - name: Install Gunicorn
+      import_tasks: gunicorn.yml
+
+    - name: Install nginx
+      import_tasks: http.yml

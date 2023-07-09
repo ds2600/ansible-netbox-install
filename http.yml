@@ -1,51 +1,47 @@
 ---
-- hosts: all
-  become: yes
+- name: "Generate OpenSSL private key"
+  openssl_privatekey:
+    path: "/etc/ssl/private/netbox.key"
+    size: "4096"
+    type: "RSA"
 
-  tasks:
-    - name: "Generate OpenSSL private key"
-      openssl_privatekey:
-        path: "/etc/ssl/private/netbox.key"
-        size: "4096"
-        type: "RSA"
-
-    - name: "Generate OpenSSL CSR"
-      openssl_csr:
-        path: "/etc/ssl/netbox.csr"
-        privatekey_path: "/etc/ssl/private/netbox.key"
+- name: "Generate OpenSSL CSR"
+  openssl_csr:
+    path: "/etc/ssl/netbox.csr"
+    privatekey_path: "/etc/ssl/private/netbox.key"
     
-    - name: "Generate OpenSSL Self Signed cert"
-      openssl_certificate:
-        path: "/etc/ssl/certs/netbox.crt"
-        privatekey_path: "/etc/ssl/private/netbox.key"
-        csr_path: "/etc/ssl/netbox.csr"
-        provider: selfsigned 
+- name: "Generate OpenSSL Self Signed cert"
+  openssl_certificate:
+    path: "/etc/ssl/certs/netbox.crt"
+    privatekey_path: "/etc/ssl/private/netbox.key"
+    csr_path: "/etc/ssl/netbox.csr"
+    provider: selfsigned 
 
-    - name: "Install nginx"
-      apt: "name={{ item }} state=present"
-      with_items:
-        - nginx
+- name: "Install nginx"
+  apt: "name={{ item }} state=present"
+  with_items:
+    - nginx
 
-    - name: "Copy nginx config"
-      copy:
-        remote_src: true
-        src: "/opt/netbox/contrib/nginx.conf"
-        dest: "/etc/nginx/sites-available/netbox" 
+- name: "Copy nginx config"
+  copy:
+    remote_src: true
+    src: "/opt/netbox/contrib/nginx.conf"
+    dest: "/etc/nginx/sites-available/netbox" 
 
-    - name: "Remove default nginx config"
-      file:
-        state: absent
-        path: "/etc/nginx/sites-enabled/default"
+- name: "Remove default nginx config"
+  file:
+    state: absent
+    path: "/etc/nginx/sites-enabled/default"
 
-    - name: "Enable Netbox in nginx"
-      file:
-        src: "/etc/nginx/sites-available/netbox"
-        dest: "/etc/nginx/sites-enabled/netbox"
-        state: link
+- name: "Enable Netbox in nginx"
+  file:
+    src: "/etc/nginx/sites-available/netbox"
+    dest: "/etc/nginx/sites-enabled/netbox"
+    state: link
 
-    - name: "Restarting nginx"
-      systemd:
-        name: "nginx"
-        state: "restarted"
+- name: "Restarting nginx"
+  systemd:
+    name: "nginx"
+    state: "restarted"
 
 

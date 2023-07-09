@@ -1,11 +1,10 @@
 ---
-- hosts: all
-  become: yes
-
-  tasks:
-  - name: "Install Netbox packages"
-    apt: "name={{ item }} state=present"
-    with_items:
-      - python3-pip
-      - acl
+- name: "Install preliminary packages"
+  apt: 
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items:
+  - python3-pip
+  - acl
 

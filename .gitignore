@@ -1,2 +1,4 @@
-hosts.ini
-vars.yml
+inventory.ini
+config.yml
+custom_fields
+custom_fields/*
