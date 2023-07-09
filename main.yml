@@ -12,31 +12,31 @@
   tasks:
     - name: Checking OS version
       meta: end_play
-      when: ansible_distribution != 'Ubuntu' or ansible_distribution_major_version != '22.043'
+      when: ansible_distribution != 'Ubuntu' or ansible_distribution_version != '22.04'
 
     - name: Install preliminary packages
-      import_tasks: initial.yml
+      import_tasks: base/initial.yml
 
     - name: Install and configure PostgreSQL
-      import_tasks: postgres.yml
+      import_tasks: base/postgres.yml
 
     - name: Install Redis
-      import_tasks: redis.yml
+      import_tasks: base/redis.yml
     
     - name: Download and install Netbox
-      import_tasks: netbox.yml
+      import_tasks: base/netbox.yml
 
     - name: Run Netbox Upgrade script
-      import_tasks: upgrade.yml
+      import_tasks: base/upgrade.yml
 
     - name: Create Netbox superuser
-      import_tasks: superuser.yml
+      import_tasks: base/superuser.yml
 
     - name: Create Housekeeping task and timer
-      import_tasks: housekeeping.yml
+      import_tasks: base/housekeeping.yml
 
     - name: Install Gunicorn
-      import_tasks: gunicorn.yml
+      import_tasks: base/gunicorn.yml
 
     - name: Install nginx
-      import_tasks: http.yml
+      import_tasks: base/http.yml

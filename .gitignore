@@ -2,3 +2,6 @@ inventory.ini
 config.yml
 custom_fields
 custom_fields/*
+plugins.yml
+plugins
+plugins/*
