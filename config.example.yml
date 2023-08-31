@@ -4,10 +4,10 @@ db_user: netbox_user
 db_password: netbox_password
 db_name: netbox
 
-# Netbox information
-nb_superuser: netbox_sup
-nb_email: sup@netbox.lan
-nb_password: netbox_superuser_password
+# Netbox Superuser information
+nb_superuser: netbox_su
+nb_email: 
+nb_password: 
 
 # Netbox version
 netbox_vers: 3.6.0
