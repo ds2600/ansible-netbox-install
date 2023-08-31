@@ -10,4 +10,4 @@ nb_email: sup@netbox.lan
 nb_password: netbox_superuser_password
 
 # Netbox version
-netbox_vers: 3.5.4
+netbox_vers: 3.6.0
