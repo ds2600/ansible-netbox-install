@@ -1,6 +1,6 @@
 # Ansible: Netbox Installation
 
-An Ansible playbook to run through the installation process of Netbox.
+An Ansible playbook to run through the installation process of [Netbox](https://github.com/netbox-community/netbox).
 
 ## Netbox
    * v3.6.1
