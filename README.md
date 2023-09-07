@@ -3,10 +3,9 @@
 An Ansible playbook to run through the installation process of Netbox.
 
 ## Netbox
-   * v3.6.0
+   * v3.6.1
 ## Compatibility
-   * Ubuntu 22.04LTS VM 
-   * Ubuntu 22.04LTS Linode/Akamai.
+   * Ubuntu 22.04LTS
 
 ## Ansible Control Dependencies
    * community.general
