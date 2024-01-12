@@ -10,4 +10,4 @@ nb_email:
 nb_password: 
 
 # Netbox version
-netbox_vers: 3.6.1
+netbox_vers: 3.7.0
