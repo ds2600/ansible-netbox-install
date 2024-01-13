@@ -22,6 +22,7 @@
   become_user: postgres
   command: "/usr/lib/postgresql/14/bin/initdb -D /var/lib/postgresql/data"
   when: not postgres_data.stat.exists
+  ignore_errors: yes
 
 - name: "Start and enable services"
   service: 

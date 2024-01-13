@@ -76,6 +76,7 @@
     path: "/opt/netbox/netbox/netbox/configuration.py"
     search_string: "ALLOWED_HOSTS = []"
     line: "ALLOWED_HOSTS = ['*']"
+  failed_when: lineinfile is failed
 
 - name: "Modify database user"
   lineinfile:
