@@ -8,6 +8,7 @@
 
   vars_files:
   - config.yml
+  - secret.yml
   
   tasks:
     - name: Checking OS version
@@ -16,27 +17,45 @@
 
     - name: Install preliminary packages
       import_tasks: base/initial.yml
+      tags:
+        - initial
 
     - name: Install and configure PostgreSQL
       import_tasks: base/postgres.yml
+      tags:
+        - postgres
 
     - name: Install Redis
       import_tasks: base/redis.yml
+      tags:
+        - redis
     
     - name: Download and install Netbox
       import_tasks: base/netbox.yml
+      tags:
+        - netbox
 
     - name: Run Netbox Upgrade script
       import_tasks: base/upgrade.yml
+      tags:
+        - upgrade
 
     - name: Create Netbox superuser
       import_tasks: base/superuser.yml
+      tags:
+        - superuser
 
     - name: Create Housekeeping task and timer
       import_tasks: base/housekeeping.yml
+      tags:
+        - housekeeping
 
     - name: Install Gunicorn
       import_tasks: base/gunicorn.yml
+      tags:
+        - gunicorn
 
     - name: Install nginx
       import_tasks: base/http.yml
+      tags:
+        - nginx
