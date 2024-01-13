@@ -5,3 +5,4 @@ custom_fields/*
 plugins.yml
 plugins
 plugins/*
+secrets.yml
