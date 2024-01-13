@@ -1,10 +1,10 @@
 ---
 # Database information
-db_user: netbox_user
-db_name: netbox
+db_user: <database-user>
+db_name: <database-name>
 
 # Netbox Superuser information
-nb_superuser: netbox_su
+nb_superuser: <netbox-superuser>
 
 # Netbox version
 netbox_vers: 3.7.0
