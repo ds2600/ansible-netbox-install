@@ -6,3 +6,4 @@ plugins.yml
 plugins
 plugins/*
 secrets.yml
+secret.yml
