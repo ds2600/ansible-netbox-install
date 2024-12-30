@@ -1,5 +1,11 @@
 ---
+- name: "Logging"
+  lineinfile:
+    path: "/tmp/netbox-logs/netbox_upgrade.log"
+    line: "==== SUPERUSER.YML ===="
+    create: yes
 - name: "Checking for previous superuser registration"
+  become: yes
   stat:
     path: "/tmp/netbox-logs/superuser_created"
   register: superuser_beacon

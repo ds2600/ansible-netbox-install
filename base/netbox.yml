@@ -72,23 +72,24 @@
     dest: "/opt/netbox/netbox/netbox/configuration.py"
 
 - name: "Modify ALLOWED_HOSTS"
+  become: yes
   lineinfile:
     path: "/opt/netbox/netbox/netbox/configuration.py"
-    search_string: "ALLOWED_HOSTS = []"
+    regexp: '^ALLOWED_HOSTS = \[\]$'
     line: "ALLOWED_HOSTS = ['*']"
   register: result
-  failed_when: result is failed
+  failed_when: result.failed
 
 - name: "Modify database user"
   lineinfile:
     path: "/opt/netbox/netbox/netbox/configuration.py"
-    search_string: "    'USER': '',               # PostgreSQL username"
+    regexp: "^\\s*'USER': ''\\s*,\\s*# PostgreSQL username$"
     line: "\u0027USER\u0027: \u0027{{  db_user }}\u0027,  # PostgreSQL username"
 
 - name: "Modify database password"
   lineinfile:
     path: "/opt/netbox/netbox/netbox/configuration.py"
-    search_string: "    'PASSWORD': '',           # PostgreSQL password"
+    regexp: "^\\s*'PASSWORD': ''\\s*,\\s*# PostgreSQL password$"
     line: "\u0027PASSWORD\u0027: \u0027{{  db_password }}\u0027,  # PostgreSQL password'}}"
 
 - name: "Generate Netbox Secret Key"
@@ -99,6 +100,6 @@
 - name: "Modify secret key"
   lineinfile:
     path: "/opt/netbox/netbox/netbox/configuration.py"
-    search_string: "SECRET_KEY = ''"
+    regexp: "^\\s*SECRET_KEY = ''\\s*$"
     line: "SECRET_KEY = '{{ secret_key.stdout }}'"
 
