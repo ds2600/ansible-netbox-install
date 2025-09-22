@@ -7,4 +7,4 @@ db_name: netbox
 nb_superuser: <netbox-superuser>
 
 # Netbox version
-netbox_vers: 4.1.10
+netbox_vers: 4.4.1

@@ -45,11 +45,6 @@
       tags:
         - superuser
 
-    - name: Create Housekeeping task and timer
-      import_tasks: base/housekeeping.yml
-      tags:
-        - housekeeping
-
     - name: Install Gunicorn
       import_tasks: base/gunicorn.yml
       tags:

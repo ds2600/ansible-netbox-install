@@ -3,7 +3,7 @@
 An Ansible playbook to run through the installation process of [Netbox](https://github.com/netbox-community/netbox).
 
 ## Netbox
-   * v4.1.10
+   * v4.4.1
 ## Compatibility
    * Ubuntu 22.04LTS
 
